@@ -1,5 +1,7 @@
 # TUI_snake_game
 
+[![Tests](https://github.com/Arttu05/TUI_snake_game/actions/workflows/test_and_build.yml/badge.svg)](https://github.com/Arttu05/TUI_snake_game/actions/workflows/test_and_build.yml)
+
 TUI(terminal user interface) snake game made with rust. Uses ratatui and crossterm to render game to terminal/console.  
 
 ## How to play
