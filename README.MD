@@ -4,6 +4,8 @@
 
 TUI(terminal user interface) snake game made with rust. Uses ratatui and crossterm to render game to terminal/console.  
 
+![Gameplay](assets/gameplay.gif)
+
 ## How to play
 
 Compile the project with following commnad: ```cargo build --realease```, while in project's root folder.
