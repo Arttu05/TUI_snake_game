@@ -46,4 +46,4 @@ Datatypes of each setting:
 - [ ] Load controls from ```settings.json```
 - [ ] Add more tests
 - [ ] Better win and lose screen
-- [ ] Prevent pause from closing immediately after pressing pause key.
+- [x] Prevent pause from closing immediately after pressing pause key.

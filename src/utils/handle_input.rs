@@ -16,23 +16,25 @@ pub fn listen_to_input_for(wait_time : &u64, return_after_input: &bool) -> KeyCo
 
     let mut time_elapsed = time_before_input.elapsed().unwrap(); 
 
-    // when "return_after_input" is true, or when pause is pressed. Makes the first loop/keypress during this function invalid.
-    // This is because, when pressing a key it will be returned and the next game stage is calculated and so on...,
-    // but when this function is called again, the previous key that was pressed, triggers again and exits this function immediately.
-    // TLDR: prevents key's from triggering twice.
-    let mut loop_count:u32 = 0;
-
     while time_elapsed <= wait_time_as_duration    {
         
         if poll(wait_time_as_duration - time_elapsed).unwrap(){
-            match read().unwrap() {
+            
+            let current_event = read().unwrap();
+            
+            if current_event.is_key_press() == false {
+                continue;
+            }
+
+            match current_event {                
+
                 Event::Key(event) => {
 
-                    if *return_after_input && loop_count >= 1 {
+                    if *return_after_input {
                         return  event.code;
                     }
 
-                    if loop_count >= 5 && event.code == PAUSE_KEY {
+                    if event.code == PAUSE_KEY {
                         return  event.code;
                     } 
 
@@ -41,8 +43,6 @@ pub fn listen_to_input_for(wait_time : &u64, return_after_input: &bool) -> KeyCo
                 _ => {}
             }
         };
-
-        loop_count += 1;
 
         time_elapsed = time_before_input.elapsed().unwrap();
 
