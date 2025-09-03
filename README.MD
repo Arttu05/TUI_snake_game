@@ -43,5 +43,7 @@ Datatypes of each setting:
 
 ## TODO
 
-- Add more tests
-- Better win and lose screen
+- [ ] Load controls from ```settings.json```
+- [ ] Add more tests
+- [ ] Better win and lose screen
+- [ ] Prevent pause from closing immediately after pressing pause key.
