@@ -1,10 +1,10 @@
-use std::{io::{stdout}, time::{Duration, SystemTime}};
+use std::{io::stdout, thread::sleep, time::Duration};
 use crossterm::event::KeyCode;
 use ratatui::{prelude::CrosstermBackend, Terminal};
 use serde::{Deserialize, Serialize};
 
 use crate::{ 
-    consts::WAIT_TIME_BEFORE_START, enums::{
+    consts::{WAIT_TIME_AFTER_LOSE_OR_WIN, WAIT_TIME_BEFORE_START}, enums::{
         directions::Directions, game_objects::GameObject, game_status::GameStatus}, structs::object_cordinate::ObjectCordinate, utils::{game_logic::{check_to_add_fruits, get_next_game_status, place_snake_to_level, wait_before_start}, handle_input::{handle_input, listen_to_input_for}, level_utils::create_level_vec, rendering::{check_if_terminal_window_big_enough, render_level, render_lose_screen, render_paused_screen, render_win_screen}}
 };
 
@@ -92,18 +92,16 @@ impl GameEngine {
             }
     
             else if self.game_status == GameStatus::Lost {
-                let current_time = SystemTime::now();
-                while current_time.elapsed().unwrap() < Duration::from_millis(500)  {
-                    render_lose_screen(&mut terminal);
-                }
+                render_lose_screen(&mut terminal);
+                sleep(Duration::from_millis(500));
+                listen_to_input_for(&10000, &true);
                 return;
             }
             
             else if self.game_status == GameStatus::Won {
-                let current_time = SystemTime::now();
-                while current_time.elapsed().unwrap() < Duration::from_millis(500)  {
-                    render_win_screen(&mut terminal);
-                }
+                render_win_screen(&mut terminal);
+                sleep(Duration::from_millis(500));
+                listen_to_input_for(&WAIT_TIME_AFTER_LOSE_OR_WIN, &true);
                 return;
             }
 

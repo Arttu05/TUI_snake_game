@@ -24,3 +24,4 @@ pub const SPACE_SIZE_X: u32 = 2;
 pub const SPACE_SIZE_Y: u32 = 1;
 
 pub const SETTING_FILE_PATH: &str = "./settings.json";
+pub const WAIT_TIME_AFTER_LOSE_OR_WIN: u64 = 10000;

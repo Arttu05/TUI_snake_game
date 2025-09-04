@@ -6,7 +6,7 @@ use crossterm::event::{
     poll, read, Event, KeyCode 
 };
 
-
+///Wait time in milliseconds
 pub fn listen_to_input_for(wait_time : &u64, return_after_input: &bool) -> KeyCode {
 
     let mut return_value = KeyCode::Null;

@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind, Stdout};
 
 use ratatui::{layout::{Alignment, Rect}, prelude::CrosstermBackend, style::{Color, Style, Stylize}, widgets::Paragraph, Frame, Terminal};
 
-use crate::{consts::{SPACE_SIZE_Y, GAME_OVER_TEXT, SPACE_SIZE_X, WIN_TEXT}, enums::game_objects::GameObject};
+use crate::{consts::{GAME_OVER_TEXT, SPACE_SIZE_X, SPACE_SIZE_Y, WAIT_TIME_AFTER_LOSE_OR_WIN, WIN_TEXT}, enums::game_objects::GameObject};
 
 pub fn render_level(ter:&mut Terminal<CrosstermBackend<Stdout>>, level_vec: &Vec<Vec<GameObject>>) -> Result<(), Error>{
     
@@ -47,11 +47,7 @@ pub fn render_lose_screen(ter:&mut Terminal<CrosstermBackend<Stdout>>){
 
     ter.draw(|frame| {
 
-        let size =frame.area();
-
-        let game_over_paragraph = Paragraph::new(GAME_OVER_TEXT).alignment(Alignment::Center);
-
-        frame.render_widget(game_over_paragraph, size);
+        render_text_before_exit(frame, GAME_OVER_TEXT);
 
     }).unwrap();
 
@@ -61,11 +57,7 @@ pub fn render_win_screen(ter:&mut Terminal<CrosstermBackend<Stdout>>){
 
     ter.draw(|frame| {
 
-        let size =frame.area();
-
-        let game_over_paragraph = Paragraph::new(WIN_TEXT).alignment(Alignment::Center);
-
-        frame.render_widget(game_over_paragraph, size);
+        render_text_before_exit(frame, WIN_TEXT);
 
     }).unwrap();
 
@@ -86,6 +78,26 @@ pub fn check_if_terminal_window_big_enough(ter:&mut Terminal<CrosstermBackend<St
 
 }
 
+fn render_text_before_exit(frame: &mut Frame, text_to_render: &str){
+
+    let exit_text = format!("Exit in {} seconds, Press any key to exit now...", (WAIT_TIME_AFTER_LOSE_OR_WIN / 1000));
+
+    let size =frame.area();
+
+    let text_paragraph = Paragraph::new(text_to_render).alignment(Alignment::Center);
+    let text_paragraph_area = Rect::new(0, 0, size.width, 1);
+
+    let exit_text = Paragraph::new(exit_text).alignment(Alignment::Center);
+    let exit_text_area = Rect::new(
+        0, 
+        text_paragraph_area.y + 1, 
+        size.width, 
+        1);
+
+    frame.render_widget(text_paragraph, text_paragraph_area);
+    frame.render_widget(exit_text, exit_text_area);
+
+}
 
 fn render_level_from_vec(frame: &mut Frame, level_vec: &Vec<Vec<GameObject>>) {
 
