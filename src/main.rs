@@ -24,6 +24,7 @@ mod utils {
 #[cfg(test)]
 mod tests{
     mod game_logic_tests;
+    mod  engine_init_tests;
 }
 
 mod consts;
@@ -51,7 +52,7 @@ fn main() {
     };
     
     //overwrites the default engine, if one is found from "./settings.json"
-    match get_engine_from_file() {
+    match get_engine_from_file(SETTING_FILE_PATH) {
 
         Ok( new_engine)=> {
             
@@ -67,7 +68,7 @@ fn main() {
                     println!("Using dedault engine settings");
                     println!("Trying to create a {}", SETTING_FILE_PATH);
                     
-                    let result_of_creating_init = create_engine_init_file(&engine);
+                    let result_of_creating_init = create_engine_init_file(&engine, SETTING_FILE_PATH);
 
                     if result_of_creating_init.is_ok(){
                         println!("Creating init file: OK!")

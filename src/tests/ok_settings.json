@@ -1,0 +1,15 @@
+{
+	"fps": 2,
+	"level_row_size": 10,
+	"level_column_size": 10,
+	"max_fruit_count": 10,
+	"game_status": "Active",
+	"move_after_key_press": true,
+	"snake": [
+		{
+			"x": 3,
+			"y": 3,
+			"visual_part": "SnakeHead"
+		}
+	]
+}
