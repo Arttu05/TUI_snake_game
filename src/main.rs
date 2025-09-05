@@ -1,6 +1,6 @@
-use std::{fs::File, io::{self, ErrorKind, Read, Write}};
+use std::io::ErrorKind;
 
-use crate::{consts::SETTING_FILE_PATH, enums::{game_objects::GameObject, game_status::GameStatus}, structs::{game_engine::GameEngine, object_cordinate::ObjectCordinate}, utils::handle_input::listen_to_input_for};
+use crate::{consts::SETTING_FILE_PATH, enums::{game_objects::GameObject, game_status::GameStatus}, structs::{game_engine::GameEngine, object_cordinate::ObjectCordinate}, utils::{engine_inits::{create_engine_init_file, get_engine_from_file}, handle_input::listen_to_input_for}};
 
 mod structs{
     pub mod game_engine;
@@ -18,6 +18,7 @@ mod utils {
     pub mod level_utils;
     pub mod rendering;
     pub mod game_logic;
+    pub mod engine_inits;
 }
 
 #[cfg(test)]
@@ -104,29 +105,4 @@ fn main() {
     }
 
     engine.start();
-}
-
-
-/// Reads settings.json, file and creates and returns **GameEngine** struct from the values. 
-fn get_engine_from_file() -> Result<GameEngine, io::Error> {
-
-    let mut file_text = String::new();
-    File::open(SETTING_FILE_PATH)?.read_to_string(&mut file_text)?;
-
-    let parsed_data: GameEngine = serde_json::from_str(&file_text)?;
-
-    Ok(parsed_data)
-
-}
-
-fn create_engine_init_file(game_engine_to_json: &GameEngine) -> Result<(),io::Error> {
-
-    let json_string = serde_json::to_string(game_engine_to_json)?;
-
-    let mut created_file = File::create(SETTING_FILE_PATH)?;
-
-    created_file.write_all( &json_string.as_bytes() )?;
-
-    Ok(())
-
 }
