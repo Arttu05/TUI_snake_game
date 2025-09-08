@@ -43,7 +43,7 @@ Datatypes of each setting:
 
 ## TODO
 
-- [ ] Improve the error messages after error in engine init.
+- [x] Improve the error messages after error in engine init.
 - [ ] Load controls from ```settings.json```
 - [ ] Add more tests
 - [x] Better win and lose screen

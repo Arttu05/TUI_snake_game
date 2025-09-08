@@ -1,6 +1,8 @@
-use std::io::ErrorKind;
+use std::io::{stdout, ErrorKind};
 
 use crate::{consts::SETTING_FILE_PATH, enums::{game_objects::GameObject, game_status::GameStatus}, structs::{game_engine::GameEngine, object_cordinate::ObjectCordinate}, utils::{engine_inits::{create_engine_init_file, get_engine_from_file}, handle_input::listen_to_input_for}};
+use crossterm::{cursor::MoveTo, style::Stylize, terminal::{Clear, ClearType}, ExecutableCommand};
+
 
 mod structs{
     pub mod game_engine;
@@ -31,7 +33,7 @@ mod consts;
 
 fn main() {
 
-    let wait_time_in_sec_after_error: u64 = 10 * 1000;
+    let wait_time_in_sec_after_error: u64 = 30 * 1000;
 
     let snake_starting_x = 3;
     let snake_starting_y = 3;
@@ -61,10 +63,15 @@ fn main() {
 
         Err(err) => {
 
+            clear_screen();
+            
             match err.kind() {
                 
                 ErrorKind::NotFound => {
-                    println!("{}, not found", SETTING_FILE_PATH);
+                    println!(
+                        "{} {}, not found",
+                        "ERROR:".red(),
+                        SETTING_FILE_PATH);
                     println!("Using dedault engine settings");
                     println!("Trying to create a {}", SETTING_FILE_PATH);
                     
@@ -80,14 +87,19 @@ fn main() {
                 }
 
                 _ => {
-                    println!("using default engine, because error: {}", err);
+                    println!( 
+                        "{} {}", 
+                        "using default engine, because error:".red(), 
+                        err);
                 }
             }
             
             
 
 
-            println!("Game will start in {} seconds, press any key to start now...", (wait_time_in_sec_after_error / 1000) );
+            println!(
+                "{}",
+                format!("Game will start in {} seconds, press any key to start now...", (wait_time_in_sec_after_error / 1000)).yellow() );
             listen_to_input_for(&wait_time_in_sec_after_error, &true);
         }
 
@@ -106,4 +118,13 @@ fn main() {
     }
 
     engine.start();
+
+    clear_screen();
+
+}
+
+
+fn clear_screen() {
+    let _ = stdout().execute(Clear(ClearType::All));
+    let _ = stdout().execute(MoveTo(0,0));
 }
